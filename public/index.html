@@ -1,0 +1,91 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
+  <script src="firebase-config.js"></script>
+ 
+</head>
+
+<body>
+  
+  
+  
+  <section>
+  <div class="signin"> 
+
+    <div class="content"> 
+
+     <h2>Login</h2> 
+
+     <form class="form"  id="loginForm"> 
+
+      <div class="inputBox"> 
+
+        <input type="text"  id="username" name="username" autocomplete="off" required> <i>Team Name</i> 
+        <input type="hidden" id="points" name="points" value="0">
+       <span id="error" class="error"></span>
+
+      </div> 
+
+      <div class="inputBox"> 
+
+       <button type="submit" id="btn-submit" class="btn" value="Submit"> Login</button>
+
+      </div> 
+
+     </form> 
+
+    </div> 
+
+   </div>   
+ 
+  </section>
+
+
+  <script>
+    // const socket = io();
+    const database = firebase.database(); // Declare database here
+
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const errorSpan = document.getElementById('error');
+
+      // Check if the username already exists in the database
+      const snapshot = await database.ref('User_Details').orderByChild('username').equalTo(username).once('value');
+
+      // if (snapshot.exists()) {
+        // Show error if username exists
+        // errorSpan.textContent = 'Username already exists. Please choose a different one.';
+      // } else {
+        // Clear any previous error messages
+        // errorSpan.textContent = '';
+
+        // Save data to Firebase
+        const data = {
+          username: username
+        };
+
+        database.ref('User_Details').push(data);
+
+        console.log("Data added to Firebase:", data);
+
+        localStorage.setItem('loggedInUsername', username);
+
+        // Emit the login event through Socket.IO
+        // socket.emit('login', { username });
+
+        // Redirect to 'wait.html'
+        window.location.href = 'buzzer.html';
+      // }
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!-- moderator/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moderator Interface</title>
+</head>
+<body>
+
+  <h1>Moderator Interface</h1>
+
+  <div style="display: inline-flex; justify-content: center;width: 90%; border: solid 2px; padding: 2rem;">
+    
+    
+    
+    <div>
+     
+        <div style="width: 200px; height: 500px; border: solid 2px black;">
+          <ul id="userList"></ul>
+        </div>
+    </div>
+
+    <div style="display: inline-flex; margin-top: 200px; ">
+      <div style="width: 100px; height: 100px; border: solid 2px; margin-left: 2rem;">Game 1</div>
+      <div style="width: 100px; height: 100px; border: solid 2px; margin-left: 2rem;">Game 2</div>
+      <div style="width: 100px; height: 100px; border: solid 2px; margin-left: 2rem;">Game 3</div>
+    </div>
+
+ 
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const userListElement = document.getElementById('userList');
+    // let firstUserLoggedIn = false; // Track if the first user has logged in
+    // let firstUserName = ''; // Store the name of the first user
+
+    socket.on('login', (data) => {
+      // if (!firstUserLoggedIn) {
+        // firstUserName = data.username;
+        const listItem = document.createElement('li');
+        listItem.textContent = `${data.username} connected`;
+        userListElement.appendChild(listItem);
+        // firstUserLoggedIn = true;
+      // }
+    });
+  </script>
+</body>
+</html>

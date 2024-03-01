@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <div id="question-container">
+        <div id="question"></div>
+        <div id="options"></div>
+    </div>
+    <button onclick="nextQuestion()">Next Question</button>
+
+    <br><br>
+    <!-- <input type="text" name="text" id="msg"> -->
+    <button onclick="sendMessage()">Send Message</button>
+
+    <br><br>
+    <div id="message" style="width: 200px; height: 200px; border: solid 1px;">
+        <ul id="userList"></ul>
+    </div>
+
+    <!-- Load Socket.IO library -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Your JavaScript code -->
+    <script>
+        const socket = io('/moderator');
+        const socket2 = io();
+   
+
+        const questions = [
+            { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: "4" },
+            { question: "What is 3 * 4?", options: ["7", "10", "12", "14"], answer: "12" }
+            // Add more questions here
+        ];
+
+        let currentQuestionIndex = 0;
+        let currentQuestion;
+
+        function sendQuestion() {
+            currentQuestion = questions[currentQuestionIndex];
+            document.getElementById('question').innerText = currentQuestion.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = ''; // Clear previous options
+            
+            currentQuestion.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.innerText = option;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                sendQuestion();
+            } else {
+                console.log('No more questions.');
+            }
+        }
+
+        function selectOption(index) {
+            // Logic to handle option selection (if needed)
+            console.log('Selected option:', index);
+        }
+
+        sendQuestion();
+
+        // Modified sendMessage() function
+        function sendMessage() {
+            const questionData = {
+                question: currentQuestion.question,
+                options: currentQuestion.options,
+                answer: currentQuestion.answer
+            };
+            socket.emit('message', JSON.stringify(questionData));
+        }
+
+        socket.on('messageToUsers', (message) => {
+            document.getElementById('message').innerText = message;
+        });
+    </script>
+
+<script>
+
+    const userListElement = document.getElementById('userList');
+    // let firstUserLoggedIn = false; // Track if the first user has logged in
+    // let firstUserName = ''; // Store the name of the first user
+
+    socket2.on('login', (data) => {
+      // if (!firstUserLoggedIn) {
+        // firstUserName = data.username;
+        const listItem = document.createElement('li');
+        listItem.textContent = `${data}`;
+        userListElement.appendChild(listItem);
+        // firstUserLoggedIn = true;
+      // }
+    });
+  </script>
+</body>
+</html>

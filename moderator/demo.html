@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Background Image</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('tablate-01.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+        /* Media Query for Small Devices */
+        @media screen and (max-width: 480px) {
+            body {
+                background-size: auto 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Responsive Background Image</h1>
+        <p>This is a test to demonstrate the functionality of the responsive background image. Resize your browser window to see the image adapt.</p>
+    </div>
+</body>
+</html>

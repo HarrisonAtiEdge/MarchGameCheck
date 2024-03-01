@@ -1,0 +1,65 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Press Buzzer Screen</title>
+ 
+
+</head>
+<body class="buzzerbackground">
+  <!-- <h1>Press Buzzer Screen</h1> -->
+  <form id="loginForm">
+    
+    <input type="hidden" id="username" name="username" value="Team">
+   
+    <button id="btn"  type="submit">Press me</button>
+
+  </form>
+
+  <h6 id="usernameText"></h6>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+
+     // Retrieve the value from localStorage
+     var loggedInUsername = localStorage.getItem('loggedInUsername');
+     // Check if loggedInUsername is not null or empty
+  if (loggedInUsername) {
+    // Update the innerHTML of the h6 element with the loggedInUsername value
+    document.getElementById('usernameText').innerHTML = loggedInUsername;
+  } else {
+    // If loggedInUsername is null or empty, display a default message
+    document.getElementById('usernameText').innerHTML = "Guest";
+  }
+
+
+// Check if the value exists and is not empty
+if (loggedInUsername) {
+    // Set the retrieved value as the value of the hidden input field
+    document.getElementById('username').value = loggedInUsername;
+}
+
+    const socket = io();
+
+    document.getElementById('loginForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      socket.emit('login', { username });
+      // disableButtonClick()
+
+    });
+
+    socket.on('login', (data) => {
+      console.log(`${data.username} logged in`);
+
+    });
+    
+
+
+  </script>
+ 
+</body>
+</html>

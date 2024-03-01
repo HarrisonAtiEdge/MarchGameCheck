@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Quiz</title>
+</head>
+<body>
+    <h1>User Quiz</h1>
+    <div id="question"></div>
+    <div id="options"></div>
+
+    <br><br>
+    <!-- <input type="button" value="Message To Moderator" onclick="sendMessage()"/> -->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let questionData;
+
+        socket.on('messageToUsers', (data) => {
+            questionData = JSON.parse(data); // Parse the JSON data
+
+            // Display the question
+            document.getElementById('question').innerText = questionData.question;
+
+            // Display the options as buttons
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = ''; // Clear previous options
+
+            questionData.options.forEach((option) => {
+                const buttonElement = document.createElement('button');
+                buttonElement.innerText = option;
+                buttonElement.onclick = () => selectOption(option);
+                optionsContainer.appendChild(buttonElement);
+            });
+        });
+
+        function selectOption(selectedOption) {
+            // console.log('Selected option:', selectedOption);
+            // console.log('Correct answer:', questionData.answer);
+
+            if (selectedOption === questionData.answer) {
+                console.log('Correct Answer!');
+                
+                let username = "Guest";
+                console.log(`Message sent from user`);
+                socket.emit('login', username + " correct"+" "+selectedOption);
+            } 
+            else {
+                console.log('Incorrect Answer!');
+            }
+        }
+
+        // let username = "Guest";
+
+        // function sendMessage() {
+        //     console.log(`Message sent from user`);
+        //     socket.emit('login', username + " correct"+" "+selectedOption);
+        // }
+       
+    </script>
+</body>
+</html>
